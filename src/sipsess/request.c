@@ -28,6 +28,9 @@ static void destructor(void *arg)
 	mem_deref(req->body);
 	mem_deref(req->req);
 
+	if (!req->sess)
+		return;
+
 	/* wait for pending requests */
 	if (req->sess->terminated && !req->sess->requestl.head)
 		mem_deref(req->sess);

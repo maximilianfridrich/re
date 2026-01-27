@@ -144,6 +144,12 @@ static void destructor(void *arg)
 	hash_unlink(&sess->he);
 	tmr_cancel(&sess->tmr);
 	list_flush(&sess->replyl);
+
+	for (struct le *le = sess->requestl.head; le; le = le->next) {
+		struct sipsess_request *req = le->data;
+		req->sess = NULL;
+	}
+
 	list_flush(&sess->requestl);
 	mem_deref((void *)sess->msg);
 	mem_deref(sess->req);
